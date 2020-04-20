@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 public class FrmCadastroCliente extends javax.swing.JFrame {
 
     //URL de Conexão com o banco de dados
-    static final String database_url = "jdbc:mysql://localhost/cliente?useTimezone=true&serverTimezone=UTC";
+    static final String jdbcURL = "jdbc:mysql://localhost:3306/cliente?useSSL=false";
 
     /**
      * Creates new form FrmCadastroCliente
@@ -234,7 +234,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             PreparedStatement pstmt = null;
             try {
                 //Abre a conexão
-                con = DriverManager.getConnection(database_url, "root", "root");
+                con = DriverManager.getConnection(jdbcURL, "root", "root");
                 //SQL de inserção
                 pstmt = con.prepareStatement("insert into cliente (NOME, CPF)  values  (?,?)");
                 pstmt.setString(1, jTNome.getText());
@@ -256,7 +256,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             PreparedStatement pstmt = null;
             try {
                 //Abre a conexão
-                con = DriverManager.getConnection(database_url, "root", "root");
+                con = DriverManager.getConnection(jdbcURL, "root", "root");
                 //SQL de atualização
                 pstmt = con.prepareStatement("update cliente set NOME = ?, CPF = ? where CLIENTEID = ?");
                 pstmt.setString(1, jTNome.getText());
@@ -284,7 +284,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         ResultSet rs = null;
 
         try {
-            con = DriverManager.getConnection(database_url, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, "root", "root");
             stmt = con.createStatement();
             //SQL de Consulta
             rs = stmt.executeQuery("SELECT * FROM cliente ");
@@ -325,7 +325,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         ResultSet rs = null;
         try {
             //Abre a conexão
-            con = DriverManager.getConnection(database_url, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, "root", "root");
             //SQL de consulta
             pstmt = con.prepareStatement("select * from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdAlterar);
@@ -357,7 +357,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         PreparedStatement pstmt = null;
         try {
             //Abre a conexão
-            con = DriverManager.getConnection(database_url, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, "root", "root");
             pstmt = con.prepareStatement("delete from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdExcluir);
             int resultado = pstmt.executeUpdate();
@@ -384,7 +384,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         ResultSet rs = null;
         try {
             //Abre a conexão
-            con = DriverManager.getConnection(database_url, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, "root", "root");
             //SQL de consulta
             pstmt = con.prepareStatement("select * from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdConsultar);
