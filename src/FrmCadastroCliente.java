@@ -15,8 +15,17 @@ import javax.swing.JTextArea;
  */
 public class FrmCadastroCliente extends javax.swing.JFrame {
 
+    //Driver de conexão com o banco de dados
+    static final String jdbcDriver = "com.mysql.cj.jdbc.Driver";
+
     //URL de Conexão com o banco de dados
-    static final String jdbcURL = "jdbc:mysql://localhost:3306/cliente?useSSL=false";
+    static final String jdbcURL = "jdbc:mysql://localhost:3306/cliente?useSSL=false&useTimezone=true&serverTimezone=UTC";
+
+    //Usuário do banco de dados
+    static final String jdbcUsuario = "root";
+
+    //Senha do usuário do banco de dados
+    static final String jdbcSenha = "";
 
     /**
      * Creates new form FrmCadastroCliente
@@ -211,13 +220,13 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBFecharActionPerformed
-        // TODO add your handling code here:
+
         //Fecha a aplicação
         System.exit(0);
     }//GEN-LAST:event_jBFecharActionPerformed
 
     private void jBLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimparActionPerformed
-        // TODO add your handling code here:
+
         //Limpa as caixas de texto do formulário
         jTClienteId.setText("");
         jTNome.setText("");
@@ -225,16 +234,19 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBLimparActionPerformed
 
     private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
-        // TODO add your handling code here:
 
         //Se é um cliente novo o id está em branco
         if (jTClienteId.getText().equals("")) {
+
             //Inclusão de um novo cliente pois o ID está em branco
             Connection con = null;
+
             PreparedStatement pstmt = null;
             try {
+                //Registra a classe do driver
+                Class.forName(jdbcDriver);
                 //Abre a conexão
-                con = DriverManager.getConnection(jdbcURL, "root", "root");
+                con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
                 //SQL de inserção
                 pstmt = con.prepareStatement("insert into cliente (NOME, CPF)  values  (?,?)");
                 pstmt.setString(1, jTNome.getText());
@@ -247,6 +259,8 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
                 }
                 pstmt.close();
                 con.close();
+            } catch (ClassNotFoundException e) {
+                System.out.println("Falha no Driver = " + e);
             } catch (SQLException e) {
                 System.out.println("Falha no Sql = " + e);
             }
@@ -255,8 +269,10 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             Connection con = null;
             PreparedStatement pstmt = null;
             try {
+                //Registra a classe do driver
+                Class.forName(jdbcDriver);
                 //Abre a conexão
-                con = DriverManager.getConnection(jdbcURL, "root", "root");
+                con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
                 //SQL de atualização
                 pstmt = con.prepareStatement("update cliente set NOME = ?, CPF = ? where CLIENTEID = ?");
                 pstmt.setString(1, jTNome.getText());
@@ -270,6 +286,8 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
                 }
                 pstmt.close();
                 con.close();
+            } catch (ClassNotFoundException e) {
+                System.out.println("Falha no Driver = " + e);
             } catch (SQLException e) {
                 System.out.println("Falha no Sql = " + e);
             }
@@ -277,14 +295,16 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBSalvarActionPerformed
 
     private void jBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBListarActionPerformed
-        // TODO add your handling code here:
 
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
 
         try {
-            con = DriverManager.getConnection(jdbcURL, "root", "root");
+            //Registra a classe do driver
+            Class.forName(jdbcDriver);
+
+            con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
             stmt = con.createStatement();
             //SQL de Consulta
             rs = stmt.executeQuery("SELECT * FROM cliente ");
@@ -309,13 +329,15 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             rs.close();
             stmt.close();
             con.close();
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Falha no Driver = " + e);
         } catch (SQLException e) {
             System.out.println("Falha no Sql = " + e);
         }
     }//GEN-LAST:event_jBListarActionPerformed
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
-        // TODO add your handling code here:
 
         //Pergunto ao usuário qual o id a ser alterado
         int clienteIdAlterar = Integer.parseInt(JOptionPane.showInputDialog("Digite o Id do cliente a ser alterado"));
@@ -323,9 +345,12 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+
         try {
+            //Registra a classe do driver
+            Class.forName(jdbcDriver);
             //Abre a conexão
-            con = DriverManager.getConnection(jdbcURL, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
             //SQL de consulta
             pstmt = con.prepareStatement("select * from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdAlterar);
@@ -342,22 +367,27 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             }
             pstmt.close();
             con.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Falha no Driver = " + e);
         } catch (SQLException e) {
             System.out.println("Falha no Sql = " + e);
         }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-        // TODO add your handling code here:
+
         //Pergunto ao usuário qual o id a ser excluído
         int clienteIdExcluir = Integer.parseInt(JOptionPane.showInputDialog("Digite o Id do cliente a ser excluído"));
 
         //Atualização de cliente pois o Id está preenchido
         Connection con = null;
         PreparedStatement pstmt = null;
+
         try {
+            //Registra a classe do driver
+            Class.forName(jdbcDriver);
             //Abre a conexão
-            con = DriverManager.getConnection(jdbcURL, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
             pstmt = con.prepareStatement("delete from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdExcluir);
             int resultado = pstmt.executeUpdate();
@@ -368,13 +398,14 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             }
             pstmt.close();
             con.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Falha no Driver = " + e);
         } catch (SQLException e) {
             System.out.println("Falha no Sql = " + e);
         }
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBConsultarActionPerformed
-        // TODO add your handling code here:
 
         //Pergunto ao usuário qual o id a ser alterado
         int clienteIdConsultar = Integer.parseInt(JOptionPane.showInputDialog("Digite o Id do cliente a ser consultado"));
@@ -382,9 +413,12 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+
         try {
+            //Registra a classe do driver
+            Class.forName(jdbcDriver);
             //Abre a conexão
-            con = DriverManager.getConnection(jdbcURL, "root", "root");
+            con = DriverManager.getConnection(jdbcURL, jdbcUsuario, jdbcSenha);
             //SQL de consulta
             pstmt = con.prepareStatement("select * from cliente where clienteId = ?");
             pstmt.setInt(1, clienteIdConsultar);
@@ -401,6 +435,8 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
             }
             pstmt.close();
             con.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Falha no Driver = " + e);
         } catch (SQLException e) {
             System.out.println("Falha no Sql = " + e);
         }

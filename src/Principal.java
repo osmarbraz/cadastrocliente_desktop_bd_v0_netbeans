@@ -12,8 +12,10 @@ public class Principal {
      * @param args args
      */
     public static void main(String[] args) {
+
         //Instancio a classe da janela do cadastro de cliente
         FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
+
         //Deixo a janela visivel
         frmCadastroCliente.setVisible(true);
     }
