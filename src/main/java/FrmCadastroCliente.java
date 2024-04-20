@@ -25,7 +25,7 @@ public class FrmCadastroCliente extends javax.swing.JFrame {
     static final String jdbcUsuario = "root";
 
     //Senha do usuário do banco de dados
-    static final String jdbcSenha = "";
+    static final String jdbcSenha = "root";
 
     /**
      * Creates new form FrmCadastroCliente
