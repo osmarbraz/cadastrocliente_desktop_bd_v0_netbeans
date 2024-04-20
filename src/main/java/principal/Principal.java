@@ -1,3 +1,6 @@
+package principal;
+
+import visao.FrmCadastroCliente;
 
 /**
  * Classe que possui a operação principal da aplicação.
